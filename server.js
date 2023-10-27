@@ -1,5 +1,6 @@
+require('dotenv').config();
+
 const express = require('express');
-// const db = require('./config/sequelize');
 const db = require('./models/index');
 
 const app = express();
@@ -8,22 +9,11 @@ const PORT = process.env.PORT || 5050;
 
 app.use(express.json());
 
+const userRouter = require('./routes/user-routes/user.routes');
 const productRouter = require('./routes/product-routes/product.routes');
 
-// Sync Sequelize models with the database
-// db.sync()
-//   .then(() => {
-//     console.log('Database synced');
-//   })
-//   .catch((error) => {
-//     console.error('Error syncing database:', error);
-//   });
-
+app.use('/auth', userRouter);
 app.use('/recommend', productRouter);
-
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });
 
 const startServer = async () => {
   try {
