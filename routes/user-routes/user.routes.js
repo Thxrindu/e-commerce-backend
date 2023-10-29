@@ -21,7 +21,7 @@ router.route('/users').get(authenticateToken, async (req, res) => {
 });
 
 //register a user
-router.route('/users').post(async (req, res) => {
+router.route('/register').post(async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
@@ -41,10 +41,10 @@ router.route('/users').post(async (req, res) => {
 });
 
 //login
-router.route('/login').post(async (req, res) => {
+router.route('/').post(async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    console.log(req.body);
     const user = await User.findOne({ where: { email } });
 
     if (user) {
@@ -57,7 +57,7 @@ router.route('/login').post(async (req, res) => {
             process.env.REFRESH_TOKEN_SECRET
           );
           refreshTokens.push(refreshToken);
-          res.json({
+          res.status(201).json({
             message: 'Login successful',
             accessToken: accessToken,
             refreshToken: refreshToken,
@@ -69,7 +69,7 @@ router.route('/login').post(async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
       }
     } else {
-      res.status(401).json({ message: 'Invalid email' });
+      res.status(400).json({ message: 'Invalid email' });
     }
   } catch (error) {
     console.error('Error during login:', error);
