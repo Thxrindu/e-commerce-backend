@@ -98,10 +98,22 @@ router.route('/refresh-token').post((req, res) => {
   });
 });
 
-//refreshToken
+//logout
 router.route('/logout').post((req, res) => {
-  // TODO : need to implement the logout method
-  // should delete the refresh token from the refresh token table
+  const refreshToken = req.body.token;
+
+  // Check if the refresh token is provided
+  if (!refreshToken) {
+    return res.status(401).json({ message: 'No refresh token provided' });
+  }
+
+  try {
+    // Remove the refresh token from the array
+    refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+    res.status(200).json({ message: 'Logout successful' });
+  } catch (err) {
+    res.status(400).json({ message: 'Logut Failed' });
+  }
 });
 
 module.exports = router;
